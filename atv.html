@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Tempo de Vida</title>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+    <h2>Calculadora de Tempo de Vida</h2>
+    <form id="formularioVida">
+        <label for="nome">Nome completo:</label><br>
+        <input type="text" id="nome" required><br><br>
+        
+        <label for="dataNascimento">Data de nascimento:</label><br>
+        <input type="date" id="dataNascimento" required><br><br>
+        
+        <label for="dataFalecimento">Data de falecimento (opcional):</label><br>
+        <input type="date" id="dataFalecimento"><br><br>
+        
+        <button type="button" onclick="calcularTempoVida()">Calcular</button>
+    </form>
+    
+    <h3 id="resultado"></h3>
+    
+    <script>
+        function calcularTempoVida() {
+            let nome = document.getElementById("nome").value.trim(); // Obtém o nome digitado pelo usuário
+            let dataNascimento = document.getElementById("dataNascimento").value; // Obtém a data de nascimento
+            let dataFalecimento = document.getElementById("dataFalecimento").value; // Obtém a data de falecimento (se preenchida)
+            let elementoResultado = document.getElementById("resultado"); // Elemento onde o resultado será exibido
+
+            if (!nome || !dataNascimento) { // Verifica se os campos obrigatórios foram preenchidos
+                elementoResultado.innerHTML = "Por favor, preencha todos os campos obrigatórios.";
+                return;
+            }
+
+            let nascimento = new Date(dataNascimento); // Converte a data de nascimento para um objeto Date
+            let dataFinal = dataFalecimento ? new Date(dataFalecimento) : new Date(); // Usa a data de falecimento ou a data atual
+
+            if (nascimento > dataFinal) { // Verifica se a data de nascimento é válida
+                elementoResultado.innerHTML = "A data de nascimento deve ser anterior à data de falecimento ou à data atual.";
+                return;
+            }
+
+            let diferencaTempo = dataFinal - nascimento; // Calcula a diferença de tempo em milissegundos
+            let dias = Math.floor(diferencaTempo / (1000 * 60 * 60 * 24)); // Converte milissegundos para dias
+            let semanas = Math.floor(dias / 7); // Converte dias para semanas
+            let meses = Math.floor(dias / 30.44); // Converte dias para meses (média de 30.44 dias por mês)
+            let anos = Math.floor(dias / 365.25); // Converte dias para anos (considerando anos bissextos)
+
+            elementoResultado.innerHTML = `
+                Olá, ${nome}!<br>
+                Você já viveu aproximadamente:<br>
+                ${dias} dias<br>
+                ${semanas} semanas<br>
+                ${meses} meses<br>
+                ${anos} anos<br>
+            `; // Exibe os resultados formatados
+        }
+    </script>
+</body>
+</html>
